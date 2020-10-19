@@ -1,0 +1,409 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="css/mui.css" rel="stylesheet" />
+		<link href="./css/courseTable.css" rel="stylesheet"/>
+		<link href="./css/mui.picker.css" rel="stylesheet">
+		<link href="./css/mui.poppicker.css" rel="stylesheet">
+		<style>
+			#refreshBtn{
+				float: right;
+				font-size: 23px;
+				color: #000000;
+				height: 40px;
+				width: 40px;
+				font-weight: 1000;
+				position: absolute;
+				right: 10px;
+				top: 12px;
+				
+			}
+			.mask{
+				width: 100%;
+				height: 100%;
+				z-index: 999;
+				background:rgba(105, 105, 105, 0.5);
+				position: absolute;
+				display: none;
+			}
+			img{
+				width: 60%;
+				margin-top: 10px;
+			}
+			#showUserPicker{
+				color: #000000;
+				font-size: 22px;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div class="Content">
+			<div class="Title">
+				<!--<span style="left: 40px;right: 40px;position: absolute;width: auto;">课程表</span>-->
+				<a id="showUserPicker" class="mui-icon mui-icon-arrowdown"><span id="titleName" style="font-family: 宋;">第?周</span></a>
+				<a class="mui-icon mui-icon-reload" id="refreshBtn"></a>
+			</div>
+			<div class="TopLine"></div>
+			<div class="zhanwei fl">&nbsp;</div>
+			<div class="Week">
+				<ul>
+					<li class="fl">一</li>
+					<li class="fl">二</li>
+					<li class="fl">三</li>
+					<li class="fl">四</li>
+					<li class="fl">五</li>
+					<li class="fl">六</li>
+				</ul>
+			</div>
+			<div class="Source">
+				<div class="Num fl">
+					<ul>
+						<li><br/><br/>第一大节</li>
+						<li><br/><br/>第二大节</li>
+						<li><br/><br/>第三大节</li>
+						<li><br/><br/>第四大节</li>
+						<li><br/><br/>第五大节</li>
+					</ul>
+				</div>
+				<div class="Day1 fl">
+					<div class="Course1"></div>
+					<div class="Course2 "></div>
+					<div class="Course3"></div>
+					<div class="Course4"></div>
+					<div class="Course5"></div>
+				</div>
+				<div class="Day2 fl">
+					<div class="Course1"></div>
+					<div class="Course2"></div>
+					<div class="Course3"></div>
+					<div class="Course4"></div>
+					<div class="Course5"></div>
+				</div>
+				<div class="Day3 fl">
+					<div class="Course1 CourseBlock1">测试</div>
+					<div class="Course2"></div>
+					<div class="Course3"></div>
+					<div class="Course4"></div>
+					<div class="Course5"></div>
+				</div>
+				<div class="Day4 fl">
+					<div class="Course1"></div>
+					<div class="Course2"></div>
+					<div class="Course3"></div>
+					<div class="Course4"></div>
+					<div class="Course5"></div>
+				</div>
+				<div class="Day5 fl">
+					<div class="Course1"></div>
+					<div class="Course2"></div>
+					<div class="Course3"></div>
+					<div class="Course4"></div>
+					<div class="Course5"></div>
+				</div>
+				<div class="Day6 fl">
+					<div class="Course1"></div>
+					<div class="Course2"></div>
+					<div class="Course3"></div>
+					<div class="Course4"></div>
+					<div class="Course5"></div>
+				</div>
+			</div>
+		</div>
+		
+		<div class="mask" id="captchaCheck">
+			<div class="mui-popup mui-popup-in" style="display: block;">
+			<div class="mui-popup-inner">
+			<div class="mui-popup-text"><img id="captchaImg" /></div>
+			<div class="mui-popup-input"><input type="text" autofocus="" placeholder="请输入验证码" id="captchaInput"></div>
+			</div>
+			<div class="mui-popup-buttons"><span class="mui-popup-button" id="nobtn">取消</span><span class="mui-popup-button mui-popup-button-bold" id="okbtn">确定</span></div>
+			</div>
+		</div>
+		
+		
+		
+		
+		<script src="js/app.js"></script>
+		<script src="js/mui.min.js"></script>
+		<script src="js/mui.picker.js"></script>
+		<script src="js/mui.poppicker.js"></script>
+		<script type="text/javascript">
+			mui.init();
+			
+			var captcha;
+			var okbtn;
+			var nobtn;
+			var captchaInput;
+			var titleName;
+			
+			mui.plusReady(function () {
+				
+				captcha = document.getElementById("captchaCheck");
+				okbtn = document.getElementById("okbtn");
+				nobtn = document.getElementById("nobtn");
+				captchaImg = document.getElementById("captchaImg");
+				captchaInput = document.getElementById("captchaInput")
+				titleName = document.getElementById("titleName");
+				
+				function changeTitle(weekName){
+					titleName.innerText= "第"+weekName+"周";
+				}
+				
+				function addCourse(Course){
+					let weekmap = ["星期一","星期二","星期三","星期四","星期五","星期六"];
+					let coursemap = ["第一大节","第二大节","第三大节","第四大节","第五大节"];
+					let row=0;
+					let col=0;
+					for(let i=0;i<6;i++){
+						if(weekmap[i]==Course.weekday)row=i+1;
+					}
+					for(let i=0;i<5;i++){
+						if(coursemap[i]==Course.section)col=i+1;
+					}
+					let target = ".Day"+row+" .Course"+col;
+					//mui('.Day6 .Course1')[0].innerText = "测试";
+					var reg = new RegExp("））");
+					mui(target)[0].innerText = Course.name+"\n"+Course.classroom.replace(reg,"");
+					mui(target)[0].classList.add("CourseBlock"+Math.ceil(Math.random()*10));
+				}
+				
+				var userPicker = new mui.PopPicker();
+				userPicker.setData(WeekData);
+				var showUserPickerButton = document.getElementById("showUserPicker")
+				showUserPickerButton.addEventListener('tap', function(event) {
+					userPicker.show(function(items) {
+						mui.toast(items[0].value);
+						var Course = JSON.parse(plus.storage.getItem("Course"+i));
+						for(let c in Course.data){
+							//console.log(Course.data[c]);
+							addCourse(Course.data[c]);
+						} 
+					});
+				}, false);
+				
+				nobtn.addEventListener("tap",function(){
+					captcha.style.display = "none";
+				});
+				function requestCaptcha(){
+					mui.ajax(api_url.getCaptchaUrl,{
+						data:{
+							
+						},
+						crossDomain:"true",
+						//dataType:'json',//服务器返回json格式数据
+						type:'GET',//HTTP请求类型
+						timeout:5000,//超时时间设置为10秒；
+						success:function(data){
+							myapp.dataType.cookie=data.cookie;
+							captchaImg.src = api_url.getCaptchaImgUrl+"?fileName="+data.cookie;
+						},
+						error:function(xhr,type,errorThrown){
+							//mui.toast(api_url.getCaptchaUrl)
+							mui.toast("请求验证码失败");
+						}
+					});
+				};
+				captchaImg.addEventListener("tap",function(){
+					requestCaptcha();
+				});
+				
+				refreshBtn = document.getElementById("refreshBtn");
+				refreshBtn.addEventListener("tap",function(){
+					captcha.style.display="block";
+					requestCaptcha();
+				});
+				function getCourse(cap){
+					function getYear(){
+						var myDate = new Date();
+						return myDate.getFullYear();
+					};
+					function getTerm(){
+						var myDate = new Date();
+						if(myDate.getMonth()>=6)return 2;
+						else return 1;
+					}
+					myapp.dataType.userInfo.UserName=plus.storage.getItem("UserName");
+					myapp.dataType.userInfo.UserPass=plus.storage.getItem("UserPass");
+					
+					//求所有周课表
+					function getAllTable(weekt){
+						console.log(weekt);
+						mui.ajax(api_url.getWeekTableByWeek,{
+							data:{
+								year: getYear(),
+								term: getTerm(),
+								whichWeek: weekt,
+								cookie: myapp.dataType.cookie
+							},
+							crossDomain:"true",
+							//dataType:'json',//服务器返回json格式数据
+							type:'GET',//HTTP请求类型
+							timeout:5000,//超时时间设置为10秒；
+							success:function(data){
+								console.log(data);
+								plus.storage.setItem("Course"+data.week,JSON.stringify(data));
+								captcha.style.display = "none";
+								mui.toast("获取成功!");
+								//TODO  更新课表
+							},
+							error:function(xhr,type,errorThrown){
+								//mui.toast(api_url.getCaptchaUrl)
+								mui.toast("请求课表失败！");
+								captcha.style.display = "none";
+							}
+						});
+					}
+					
+					mui.ajax(api_url.getCaptchaCheckUrl,{
+						data:{
+							captcha: cap,
+							cookie: myapp.dataType.cookie
+						},
+						crossDomain:true,
+						//dataType:'json',//服务器返回json格式数据
+						type:'GET',//HTTP请求类型
+						timeout:5000,//超时时间设置为10秒；
+						success:function(data){
+							//mui.toast(data);
+							// 登陆
+							if(data.toString()=="true"){
+								mui.ajax(api_url.loginUrl,{
+									data:{
+										username: myapp.dataType.userInfo.UserName,
+										password: myapp.dataType.userInfo.UserPass,
+										captcha: cap,
+										cookie: myapp.dataType.cookie
+									},
+									crossDomain:true,
+									//dataType:'json',//服务器返回json格式数据
+									type:'POST',//HTTP请求类型
+									timeout:5000,//超时时间设置为10秒；
+									success:function(data){
+										if(data.cookie==null){
+											mui.toast("登录失败");
+											requestCaptcha();
+										}
+										else{
+											captcha.style.display = "none";
+											myapp.dataType.cookie=data.cookie;
+											plus.storage.setItem("loginFlag","true");
+											mui.ajax(api_url.getTableUrl,{
+												data:{
+													year: getYear(),
+													term: getTerm(),
+													cookie: myapp.dataType.cookie
+												},
+												crossDomain:"true",
+												//dataType:'json',//服务器返回json格式数据
+												type:'GET',//HTTP请求类型
+												timeout:5000,//超时时间设置为10秒；
+												success:function(data){
+													//console.log(data);
+													plus.storage.setItem("Course"+data.week,JSON.stringify(data));
+													
+													mui.toast("获取成功!");
+													var Course = JSON.parse(plus.storage.getItem("Course"+data.week));
+													for(let c in Course.data){
+														addCourse(Course.data[c]);
+													}
+													changeTitle(data.week);
+													plus.storage.setItem("beginDay",JSON.stringify(setBeginWeek()));
+													plus.storage.setItem("beginWeek",data.week);
+													
+													for(let i=1;i<=25;i++){
+														if(i==data.week)continue;
+														plus.storage.removeItem("Course"+i);
+													}
+													
+													function set(obj){
+														setTimeout(function(){
+															getAllTable(obj);
+														},3000);   
+													}
+													for(var weektime=1;weektime<=25;weektime++){
+														(function(weektime) {
+															setTimeout(function () {
+																getAllTable(weektime);
+															},1000);
+														 })(weektime)
+													};
+													
+												},
+												error:function(xhr,type,errorThrown){
+													//mui.toast(api_url.getCaptchaUrl)
+													mui.toast("请求课表失败！");
+													captcha.style.display = "none";
+												}
+											});
+										}
+									},
+									error:function(xhr,type,errorThrown){
+										mui.toast("登陆失败！");
+										captcha.style.display = "none";
+									}
+								});
+							}
+							else{
+								mui.toast("验证码错误！");
+								requestCaptcha();
+							}
+								
+						},
+						error:function(xhr,type,errorThrown){
+							//mui.toast(api_url.getCaptchaUrl)
+							mui.toast("检查验证码失败");
+						}
+					});
+				};
+				
+				okbtn.addEventListener("tap",function(){
+					if(!myapp.regExp.notEmptyReg.test(captchaInput.value)) {
+						plus.nativeUI.toast('请输入验证码');
+						return;
+					}
+					getCourse(captchaInput.value);
+				});
+				
+				//test---------------------------------
+				/*
+				for(var i=1;i<=10;i++){
+					var Course = JSON.parse(plus.storage.getItem("Course"+i));
+					console.log(i);
+					for(let c in Course.data){
+						console.log(Course.data[c]);
+						//addCourse(Course.data[c]);
+					} 
+					console.log("----------------------");
+				}*/
+				
+				
+				var isData = JSON.parse(plus.storage.getItem("beginWeek"));
+				if(isData!=null){
+					
+					let beginDay = JSON.parse(plus.storage.getItem("beginDay"));
+					//console.log(isData);
+					//console.log(beginDay);
+					let nowWeek = getNowWeekDate(beginDay,isData);
+					mui.toast("现在是第"+nowWeek+"周");
+					changeTitle(nowWeek);
+					var Course = JSON.parse(plus.storage.getItem("Course"+nowWeek));
+					for(let c in Course.data){
+						//console.log(Course.data[c]);
+						addCourse(Course.data[c]);
+					} 
+				}
+				else{
+					captcha.style.display = "block";
+					requestCaptcha();
+				}
+				
+			});
+		</script>
+	</body>
+
+</html>

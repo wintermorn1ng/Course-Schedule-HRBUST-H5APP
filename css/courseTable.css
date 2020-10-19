@@ -1,0 +1,164 @@
+@font-face {
+  font-family: "宋";
+  src: url("simsun.ttc");
+}
+
+body{
+    margin: 0%;
+    padding: 0;
+    text-align: center;
+}
+body>div{
+    margin-right: auto;
+    margin-left: auto;
+    text-align: center;
+}
+
+div,form,ul,ol,li,span,p,dl,dt,dd,img{margin: 0;padding: 0;border: 0;}
+h1,h2,h3,h4,h5,h6{margin: 0;padding: 0;font-size: 12px;font-weight: normal;}
+
+ul,ol,li{list-style: none}
+
+.fl{float: left}
+
+.Content{
+    width: auto;
+    height: auto;
+    margin: 0;
+}
+
+/*设置标题CSS规则*/
+.Title{
+    padding-top: 12px;
+    margin: 0 auto;
+    font-size: 18px; font-family: 宋;color: rgb(0, 0, 0);
+	height: 40px;
+}
+
+/*设置星期CSS规则*/
+.TopLine{
+    width: auto;
+    height: 2px;
+    background-color: #d2d2d2;
+    margin-top: 5px;
+}
+
+.Week{
+    width: auto;
+    height: 100%;
+    opacity: 0.6;
+}
+
+
+
+.Week ul{
+	background-color: #e2e1e4;
+}
+
+.Week ul li{
+    font-family: 宋;
+	font-weight: 900;
+    font-size: 16px;
+    color: #000000;
+    text-align: center;
+    width: 15%;
+	background-color: #e2e1e4;
+}
+.zhanwei{
+	width: 30px!important;
+	background-color: #e2e1e4;
+}
+.Source{
+	background-color: #000000;
+}
+
+.Num{
+    width: 30px;
+    height:auto;
+    filter: alpha(opacity=60);
+    opacity: 0.6;
+	background-color: #e2e1e4;
+}
+
+.Num ul li{
+    font-family: 宋;
+    font-size: 13px;
+	font-weight: 600;
+    color: #000000;
+    width: 25px;
+    height: 120px;
+	line-height: 15px;
+}
+
+.Day1,.Day2,.Day3,.Day4,.Day5,.Day6,.Day7{
+    width: 15%;
+    height: 120px;
+}
+
+.Course1,.Course2,.Course3,.Course4,.Course5{
+    width: 95%;
+    height: 115px;
+	color: #FFFFFF;
+	font-family: 宋;
+	font-size: 13px;
+	margin-top: 5px;
+	line-height: 13px;
+	padding: 8px;
+}
+
+.CourseBlock1{
+	border-radius: 15px;
+	background-color: #3F51B5;
+	box-shadow: 3px 3px 3px #888888;
+}
+
+.CourseBlock2{
+	border-radius: 15px;
+	background-color: #009688;
+	box-shadow: 3px 3px 3px #888888;
+}
+
+.CourseBlock3{
+	border-radius: 15px;
+	background-color: #9C27B0;
+	box-shadow: 3px 3px 3px #888888;
+}
+
+.CourseBlock4{
+	border-radius: 15px;
+	background-color: #EF5350;
+	box-shadow: 3px 3px 3px #888888;
+}
+
+.CourseBlock5{
+	border-radius: 15px;
+	background-color: #1E88E5;
+	box-shadow: 3px 3px 3px #888888;
+}
+
+.CourseBlock6{
+	border-radius: 15px;
+	background-color: #43A047;
+	box-shadow: 3px 3px 3px #888888;
+}
+
+.CourseBlock7{
+	border-radius: 15px;
+	background-color: #795548;
+	box-shadow: 3px 3px 3px #888888;
+}
+.CourseBlock8{
+	border-radius: 15px;
+	background-color: #E91E63;
+	box-shadow: 3px 3px 3px #888888;
+}
+.CourseBlock9{
+	border-radius: 15px;
+	background-color: #607D8B;
+	box-shadow: 3px 3px 3px #888888;
+}
+.CourseBlock10{
+	border-radius: 15px;
+	background-color: #7986CB;
+	box-shadow: 3px 3px 3px #888888;
+}

@@ -1,0 +1,53 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="css/mui.css" rel="stylesheet" />
+		<style>
+			.main{
+				text-align: center;
+				position: absolute;
+				top: 40%;
+				bottom: 50%;
+				left: 40px;
+				right: 40px;
+			}
+			button{
+				display: block;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div class="main">
+			<button type="button" class="mui-btn mui-btn-primary" id="resetLoginBtn">清除登录信息</button>
+			<button type="button" class="mui-btn mui-btn-primary" id="resetCourseBtn">清除课表信息</button>
+			<button type="button" class="mui-btn mui-btn-primary" id="resetAllbtn">清除所有缓存</button>
+		</div>
+		
+		<script src="js/mui.js"></script>
+		<script type="text/javascript">
+			mui.init();
+			mui.plusReady(function(){
+				resetButton = document.getElementById("resetLoginBtn");
+				resetCourseBtn = document.getElementById("resetCourseBtn");
+				resetAllbtn = document.getElementById("resetAllbtn");
+				resetButton.addEventListener("tap",function(){
+					plus.storage.removeItem("loginFlag");
+					mui.toast("清除登录信息成功！");
+				});
+				resetCourseBtn.addEventListener("tap",function(){
+					plus.storage.removeItem("BeginWeek");
+					mui.toast("清除课表信息成功！");
+				});
+				resetAllbtn.addEventListener("tap",function(){
+					plus.storage.clear();
+					mui.toast("清除所有信息成功");
+				});
+			});
+		</script>
+	</body>
+
+</html>

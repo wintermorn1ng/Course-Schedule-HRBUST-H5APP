@@ -1,0 +1,265 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="css/mui.css" rel="stylesheet" />
+		<style>
+			.area {
+				margin: 20px auto 0px auto;
+			}
+			
+			.mui-input-group {
+				margin-top: 10px;
+			}
+			
+			.mui-input-group:first-child {
+				margin-top: 20px;
+			}
+			
+			.mui-input-group label {
+				width: 22%;
+			}
+			
+			.mui-input-row label~input,
+			.mui-input-row label~select,
+			.mui-input-row label~textarea {
+				width: 78%;
+			}
+			
+			.mui-checkbox input[type=checkbox],
+			.mui-radio input[type=radio] {
+				top: 6px;
+			}
+			
+			.mui-content-padded {
+				margin-top: 25px;
+			}
+			
+			.mui-btn {
+				padding: 10px;
+			}
+			
+			.link-area {
+				display: block;
+				margin-top: 25px;
+				text-align: center;
+			}
+			
+			.spliter {
+				color: #bbb;
+				padding: 0px 8px;
+			}
+			
+			.oauth-area {
+				position: absolute;
+				bottom: 20px;
+				left: 0px;
+				text-align: center;
+				width: 100%;
+				padding: 0px;
+				margin: 0px;
+			}
+			
+			.oauth-area .oauth-btn {
+				display: inline-block;
+				width: 50px;
+				height: 50px;
+				background-size: 30px 30px;
+				background-position: center center;
+				background-repeat: no-repeat;
+				margin: 0px 20px;
+				/*-webkit-filter: grayscale(100%); */
+				border: solid 1px #ddd;
+				border-radius: 25px;
+			}
+			
+			.oauth-area .oauth-btn:active {
+				border: solid 1px #aaa;
+			}
+			
+			.oauth-area .oauth-btn.disabled {
+				background-color: #ddd;
+			}
+			.captchaImg{
+				margin-top: 10px;
+				position: relative;
+				vertical-align: middle;
+				left: 33%;
+				height: 50px;
+			}
+		</style>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav">
+			<h1 class="mui-title">登录</h1>
+		</header>
+		<div class="mui-content">
+			<form id='login-form' class="mui-input-group">
+				<div class="mui-input-row">
+					<label>学号</label>
+					<input id='account' type="text" class="mui-input-clear mui-input" placeholder="请输入账号">
+				</div>
+				<div class="mui-input-row">
+					<label>密码</label>
+					<input id='password' type="password" class="mui-input-clear mui-input" placeholder="请输入密码">
+				</div>
+				<div>
+					<img id="captchaImg" class="captchaImg"/>
+				</div>
+				<div class="mui-input-row">
+					<label>验证码</label>
+					<input id='captcha' type="text" class="mui-input-clear mui-input" placeholder="请输入验证码">
+					
+				</div>
+				
+			</form>
+			<div class="mui-content-padded">
+				<button id='login' class="mui-btn mui-btn-block mui-btn-primary">登录</button>
+				
+			</div>
+			<div class="mui-content-padded oauth-area">
+			</div>
+		</div>
+		<script src="js/mui.js"></script>
+		<script type="text/javascript" src="js/app.js"></script>
+		<script type="text/javascript">
+			"use strict";
+			mui.init({
+				preloadPages:[{
+					url:"main.html",
+					id:"main.html"
+				}]
+			});
+			var loginButton = document.getElementById('login');
+			var accountBox = document.getElementById('account');
+			var passwordBox = document.getElementById('password');
+			var captchaBox = document.getElementById("captcha");
+			var captchaImg = document.getElementById('captchaImg');
+			
+			document.addEventListener("plusready",function () {
+				//plus.storage.setItem("loginFlag","true");
+			    var self = plus.webview.currentWebview();
+				
+				function requestCaptcha(){
+					mui.ajax(api_url.getCaptchaUrl,{
+						data:{
+							
+						},
+						crossDomain:"true",
+						//dataType:'json',//服务器返回json格式数据
+						type:'GET',//HTTP请求类型
+						timeout:5000,//超时时间设置为10秒；
+						success:function(data){
+							myapp.dataType.cookie=data.cookie;
+							captchaImg.src = api_url.getCaptchaImgUrl+"?fileName="+data.cookie;
+						},
+						error:function(xhr,type,errorThrown){
+							//mui.toast(api_url.getCaptchaUrl)
+							mui.toast("请求验证码失败");
+						}
+					});
+				};
+				
+				requestCaptcha();
+				
+				captchaImg.addEventListener("tap",function(){
+					mui.toast("获取验证码");
+					requestCaptcha();
+				});
+				
+				loginButton.addEventListener("tap",function(){
+					//mui(loginButton).button("loading");
+					if(!myapp.regExp.notEmptyReg.test(accountBox.value)) {
+						plus.nativeUI.toast('请输入账号');
+						return;
+					}
+					if(!myapp.regExp.notEmptyReg.test(passwordBox.value)) {
+						plus.nativeUI.toast('请输入密码');
+						return;
+					}
+					
+					if(!myapp.regExp.notEmptyReg.test(captchaBox.value)) {
+						plus.nativeUI.toast('请输入验证码');
+						return;
+					}
+					plus.storage.setItem("UserName",accountBox.value);
+					plus.storage.setItem("UserPass",passwordBox.value);
+					myapp.dataType.userInfo.UserName=accountBox.value;
+					myapp.dataType.userInfo.UserPass=passwordBox.value;
+					mui(login.btnLogin).button("loading");
+					mui.ajax(api_url.getCaptchaCheckUrl,{
+						data:{
+							captcha: captchaBox.value,
+							cookie: myapp.dataType.cookie
+						},
+						crossDomain:true,
+						//dataType:'json',//服务器返回json格式数据
+						type:'GET',//HTTP请求类型
+						timeout:5000,//超时时间设置为10秒；
+						success:function(data){
+							//mui.toast(data);
+							// 登陆
+							if(data.toString()=="true"){
+								mui.ajax(api_url.loginUrl,{
+									data:{
+										username: myapp.dataType.userInfo.UserName,
+										password: myapp.dataType.userInfo.UserPass,
+										captcha: captchaBox.value,
+										cookie: myapp.dataType.cookie
+									},
+									crossDomain:true,
+									//dataType:'json',//服务器返回json格式数据
+									type:'POST',//HTTP请求类型
+									timeout:5000,//超时时间设置为10秒；
+									success:function(data){
+										if(data.cookie==null){
+											mui.toast("登录失败");
+											requestCaptcha();
+										}
+										else{
+											mui.toast("登录成功");
+											myapp.dataType.cookie=data.cookie;
+											plus.storage.setItem("loginFlag","true");
+											plus.webview.getWebviewById("main.html").show();
+											self.close();
+										}
+											
+									},
+									error:function(xhr,type,errorThrown){
+										mui(login.btnLogin).button("reset");
+										mui.toast("登陆网络错误");
+									}
+								});
+							}
+							else
+								mui.toast("验证码错误！");
+						},
+						error:function(xhr,type,errorThrown){
+							//mui.toast(api_url.getCaptchaUrl)
+							mui(login.btnLogin).button("reset");
+							mui.toast("检查验证码失败");
+						}
+					});
+					/* if(checkCaptcha(captchaBox.value)==false){
+						mui.toast("验证码错误！");
+						return ;
+					} 
+					mui.toast("验证码正确！"); */
+					
+					
+					/* mui.openWindow({
+						url:"main.html",
+						id:"main.html"
+					}); */
+					
+				});
+				
+			})
+		</script>
+	</body>
+
+</html>
