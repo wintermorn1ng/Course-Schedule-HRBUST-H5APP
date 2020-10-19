@@ -26,6 +26,68 @@ api_url.getTableUrl = baseUrl+"/api/getNowWeekTable";
 api_url.getWeekTableByWeek = baseUrl+"/api/getWeekTableByWeek";
 
 
+function setBeginWeek(){
+	let nowDay = new Date();
+	let nowWeek = nowDay.getDay();
+	if(nowWeek==0)nowWeek=7;
+	let nowDayZhouyi = new Date();
+	nowDayZhouyi.setDate(nowDay.getDate()-nowWeek);
+	return nowDayZhouyi;
+};
+	
+function getNowWeekDate(beginDay,beginWeek){
+	//console.log("fuck:"+beginDay+" * "+beginWeek);
+	let nowDay = new Date();
+	//console.log(nowDay);
+	let pos = nowDay-new Date(beginDay);
+	pos = Math.abs(pos);
+	//console.log(pos);
+	let iDays = Math.floor(pos/(24 * 3600 * 1000));
+	//console.log(iDays);
+	return (parseInt(iDays/7)+beginWeek);
+};
+
+function addCourse(Course){
+	let weekmap = ["星期一","星期二","星期三","星期四","星期五","星期六"];
+	let coursemap = ["第一大节","第二大节","第三大节","第四大节","第五大节"];
+	let row=0;
+	let col=0;
+	for(let i=0;i<6;i++){
+		if(weekmap[i]==Course.weekday)row=i+1;
+	}
+	for(let i=0;i<5;i++){
+		if(coursemap[i]==Course.section)col=i+1;
+	}
+	let target = ".Day"+row+" .Course"+col;
+	//mui('.Day6 .Course1')[0].innerText = "测试";
+	var reg = new RegExp("））");
+	mui(target)[0].innerText = Course.name+"\n"+Course.classroom.replace(reg,"");
+	mui(target)[0].classList.add("CourseBlock"+Math.ceil(Math.random()*10));
+}
+
+function changeTitle(weekName){
+	titleName.innerText= "第"+weekName+"周";
+}
+
+function clearPage(){
+	for(let i=1;i<=6;i++){
+		for(let j=1;j<=5;j++){
+			let target = ".Day"+i+" .Course"+j;
+			var targetNode = mui(target)[0];
+			var childs = targetNode.childNodes; 
+			for(var t = childs .length - 1; t >= 0; t--) {
+			 targetNode.removeChild(childs[t]);
+			  
+			}
+			if(targetNode.className.match(/CourseBlock(\S*)/)!=null){
+				console.log(targetNode.className.match(/CourseBlock(\S*)/)[0]);
+				targetNode.classList.remove(targetNode.className.match(/CourseBlock(\S*)/)[0]);
+			}
+		}
+	}
+}
+
+
 var WeekData = 
 	[{
 		value: '1',
@@ -90,23 +152,3 @@ var WeekData =
 		value: '20',
 		text: '第20周'
 	}];
-function setBeginWeek(){
-	let nowDay = new Date();
-	let nowWeek = nowDay.getDay();
-	if(nowWeek==0)nowWeek=7;
-	let nowDayZhouyi = new Date();
-	nowDayZhouyi.setDate(nowDay.getDate()-nowWeek);
-	return nowDayZhouyi;
-};
-	
-function getNowWeekDate(beginDay,beginWeek){
-	//console.log("fuck:"+beginDay+" * "+beginWeek);
-	let nowDay = new Date();
-	//console.log(nowDay);
-	let pos = nowDay-new Date(beginDay);
-	pos = Math.abs(pos);
-	//console.log(pos);
-	let iDays = Math.floor(pos/(24 * 3600 * 1000));
-	//console.log(iDays);
-	return (parseInt(iDays/7)+beginWeek);
-};

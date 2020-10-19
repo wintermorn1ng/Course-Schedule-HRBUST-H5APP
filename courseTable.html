@@ -150,27 +150,6 @@
 				captchaInput = document.getElementById("captchaInput")
 				titleName = document.getElementById("titleName");
 				
-				function changeTitle(weekName){
-					titleName.innerText= "第"+weekName+"周";
-				}
-				
-				function addCourse(Course){
-					let weekmap = ["星期一","星期二","星期三","星期四","星期五","星期六"];
-					let coursemap = ["第一大节","第二大节","第三大节","第四大节","第五大节"];
-					let row=0;
-					let col=0;
-					for(let i=0;i<6;i++){
-						if(weekmap[i]==Course.weekday)row=i+1;
-					}
-					for(let i=0;i<5;i++){
-						if(coursemap[i]==Course.section)col=i+1;
-					}
-					let target = ".Day"+row+" .Course"+col;
-					//mui('.Day6 .Course1')[0].innerText = "测试";
-					var reg = new RegExp("））");
-					mui(target)[0].innerText = Course.name+"\n"+Course.classroom.replace(reg,"");
-					mui(target)[0].classList.add("CourseBlock"+Math.ceil(Math.random()*10));
-				}
 				
 				var userPicker = new mui.PopPicker();
 				userPicker.setData(WeekData);
@@ -399,7 +378,7 @@
 					captcha.style.display = "block";
 					requestCaptcha();
 				}
-				
+				clearPage();
 			});
 		</script>
 	</body>
