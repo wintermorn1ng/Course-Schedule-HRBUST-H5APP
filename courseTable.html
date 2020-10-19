@@ -325,12 +325,10 @@
 															getAllTable(obj);
 														},3000);   
 													}
-													for(var weektime=1;weektime<=25;weektime++){
-														(function(weektime) {
-															setTimeout(function () {
-																getAllTable(weektime);
-															},1000);
-														 })(weektime)
+													for(let weektime=1;weektime<=25;weektime++){
+														setTimeout(function () {
+															getAllTable(weektime);
+														},weektime*500,weektime);
 													};
 													
 												},
