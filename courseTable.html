@@ -45,7 +45,7 @@
 		<div class="Content">
 			<div class="Title">
 				<!--<span style="left: 40px;right: 40px;position: absolute;width: auto;">课程表</span>-->
-				<a id="showUserPicker" class="mui-icon mui-icon-arrowdown"><span id="titleName" style="font-family: 宋;">第?周</span></a>
+				<a id="showUserPicker" class="mui-icon mui-icon-arrowdown"><span id="titleName">第?周</span></a>
 				<a class="mui-icon mui-icon-reload" id="refreshBtn"></a>
 			</div>
 			<div class="TopLine"></div>
@@ -72,7 +72,7 @@
 				</div>
 				<div class="Day1 fl">
 					<div class="Course1"></div>
-					<div class="Course2 "></div>
+					<div class="Course2"></div>
 					<div class="Course3"></div>
 					<div class="Course4"></div>
 					<div class="Course5"></div>
@@ -85,7 +85,7 @@
 					<div class="Course5"></div>
 				</div>
 				<div class="Day3 fl">
-					<div class="Course1 CourseBlock1">测试</div>
+					<div class="Course1"></div>
 					<div class="Course2"></div>
 					<div class="Course3"></div>
 					<div class="Course4"></div>
@@ -156,10 +156,11 @@
 				var showUserPickerButton = document.getElementById("showUserPicker")
 				showUserPickerButton.addEventListener('tap', function(event) {
 					userPicker.show(function(items) {
-						mui.toast(items[0].value);
-						var Course = JSON.parse(plus.storage.getItem("Course"+i));
+						//mui.toast(items[0].value);
+						var Course = JSON.parse(plus.storage.getItem("Course"+items[0].value));
+						clearPage(items[0].value);
+						changeTitle(items[0].value);
 						for(let c in Course.data){
-							//console.log(Course.data[c]);
 							addCourse(Course.data[c]);
 						} 
 					});
@@ -211,7 +212,7 @@
 					
 					//求所有周课表
 					function getAllTable(weekt){
-						console.log(weekt);
+						//console.log(weekt);
 						mui.ajax(api_url.getWeekTableByWeek,{
 							data:{
 								year: getYear(),
@@ -227,7 +228,7 @@
 								console.log(data);
 								plus.storage.setItem("Course"+data.week,JSON.stringify(data));
 								captcha.style.display = "none";
-								mui.toast("获取成功!");
+								//mui.toast("获取成功!");
 								//TODO  更新课表
 							},
 							error:function(xhr,type,errorThrown){
@@ -287,27 +288,30 @@
 													
 													mui.toast("获取成功!");
 													var Course = JSON.parse(plus.storage.getItem("Course"+data.week));
+													clearPage();
 													for(let c in Course.data){
 														addCourse(Course.data[c]);
 													}
 													changeTitle(data.week);
-													plus.storage.setItem("beginDay",JSON.stringify(setBeginWeek()));
+													
+													plus.storage.setItem("beginDay",JSON.stringify(getBeginDay()));
 													plus.storage.setItem("beginWeek",data.week);
 													
 													for(let i=1;i<=25;i++){
 														if(i==data.week)continue;
 														plus.storage.removeItem("Course"+i);
 													}
-													
+													/*
 													function set(obj){
 														setTimeout(function(){
 															getAllTable(obj);
 														},3000);   
-													}
+													}*/
+													
 													for(let weektime=1;weektime<=25;weektime++){
 														setTimeout(function () {
 															getAllTable(weektime);
-														},weektime*500,weektime);
+														},weektime*100,weektime);
 													};
 													
 												},
@@ -361,16 +365,15 @@
 				
 				var isData = JSON.parse(plus.storage.getItem("beginWeek"));
 				if(isData!=null){
-					
 					let beginDay = JSON.parse(plus.storage.getItem("beginDay"));
-					//console.log(isData);
+					console.log("beginWeek"+isData);
 					//console.log(beginDay);
-					let nowWeek = getNowWeekDate(beginDay,isData);
-					mui.toast("现在是第"+nowWeek+"周");
+					let NowDay = new Date();
+					let nowWeek = getNowWeek(new Date(beginDay),isData,NowDay);
+					//mui.toast("现在是第"+nowWeek+"周");
 					changeTitle(nowWeek);
 					var Course = JSON.parse(plus.storage.getItem("Course"+nowWeek));
 					for(let c in Course.data){
-						//console.log(Course.data[c]);
 						addCourse(Course.data[c]);
 					} 
 				}
@@ -378,7 +381,7 @@
 					captcha.style.display = "block";
 					requestCaptcha();
 				}
-				clearPage();
+				//clearPage();
 			});
 		</script>
 	</body>

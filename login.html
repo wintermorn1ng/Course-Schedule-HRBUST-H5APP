@@ -177,6 +177,12 @@
 						plus.nativeUI.toast('请输入账号');
 						return;
 					}
+					if(!myapp.regExp.myclassReg.test(accountBox.value)) {
+						mui.alert('抱歉，本应用处于内测阶段，暂只对内测用户开放','提示','确定',function (e) {
+						   return;
+						},'div');
+						return;
+					}
 					if(!myapp.regExp.notEmptyReg.test(passwordBox.value)) {
 						plus.nativeUI.toast('请输入密码');
 						return;
@@ -235,8 +241,11 @@
 									}
 								});
 							}
-							else
+							else{
+								requestCaptcha();
 								mui.toast("验证码错误！");
+							}
+								
 						},
 						error:function(xhr,type,errorThrown){
 							//mui.toast(api_url.getCaptchaUrl)

@@ -3,7 +3,8 @@ var myapp = {};
 myapp.regExp={
 	notEmptyReg:/\S/,
 	emailReg:/\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*/,
-	mobileReg:/^1[3|4|5|7|8]\d{9}$/
+	mobileReg:/^1[3|4|5|7|8]\d{9}$/,
+	myclassReg:/18040105(\d){2}$/
 }
 
 myapp.dataType = {};
@@ -16,7 +17,8 @@ myapp.dataType.cookie = null;
 myapp.dataType.isLogin=false;
 
 
-var baseUrl = "http://192.168.199.203:8080";
+var baseUrl = "http://192.168.199.203:1000";
+//var baseUrl = "http://39.105.63.200:1000";
 var api_url={};
 api_url.getCaptchaUrl = baseUrl+"/api/getCaptcha";
 api_url.getCaptchaImgUrl = baseUrl+"/api/getCaptchaImg";
@@ -26,26 +28,28 @@ api_url.getTableUrl = baseUrl+"/api/getNowWeekTable";
 api_url.getWeekTableByWeek = baseUrl+"/api/getWeekTableByWeek";
 
 
-function setBeginWeek(){
-	let nowDay = new Date();
-	let nowWeek = nowDay.getDay();
-	if(nowWeek==0)nowWeek=7;
-	let nowDayZhouyi = new Date();
-	nowDayZhouyi.setDate(nowDay.getDate()-nowWeek);
-	return nowDayZhouyi;
-};
+let getBeginDay = function (){
+    let beginDay = new Date();
+    let dWeek = beginDay.getDay();
+    if(dWeek==0)dWeek=7;
+    dWeek-=1;
+    beginDay.setDate(beginDay.getDate()-dWeek);
+    //console.log(beginDay);
+    return beginDay;
+}
 	
-function getNowWeekDate(beginDay,beginWeek){
-	//console.log("fuck:"+beginDay+" * "+beginWeek);
-	let nowDay = new Date();
-	//console.log(nowDay);
-	let pos = nowDay-new Date(beginDay);
-	pos = Math.abs(pos);
-	//console.log(pos);
-	let iDays = Math.floor(pos/(24 * 3600 * 1000));
-	//console.log(iDays);
-	return (parseInt(iDays/7)+beginWeek);
-};
+let getNowWeek = function (beginDay,beginWeek,nowDay){
+    let dateSpan = nowDay - beginDay;
+    //dateSpan = Math.abs(dateSpan);
+    let iDays = Math.floor(dateSpan / (24 * 3600 * 1000))+1;
+    //console.log(iDays);
+    iDays = Math.floor(iDays/7)+beginWeek;
+    console.log("nowWeek:"+iDays);
+	return iDays;
+}
+
+let colorPos = 1;
+let colorMap = new Map();
 
 function addCourse(Course){
 	let weekmap = ["星期一","星期二","星期三","星期四","星期五","星期六"];
@@ -61,8 +65,17 @@ function addCourse(Course){
 	let target = ".Day"+row+" .Course"+col;
 	//mui('.Day6 .Course1')[0].innerText = "测试";
 	var reg = new RegExp("））");
-	mui(target)[0].innerText = Course.name+"\n"+Course.classroom.replace(reg,"");
-	mui(target)[0].classList.add("CourseBlock"+Math.ceil(Math.random()*10));
+	if(colorMap.get(Course.name)==undefined){
+		mui(target)[0].classList.add("CourseBlock"+colorPos);
+		colorMap.set(Course.name,colorPos);
+		colorPos++;
+		if(colorPos>10)colorPos=colorPos%10;
+	}
+	else{
+		mui(target)[0].classList.add("CourseBlock"+colorMap.get(Course.name));
+	}
+	mui(target)[0].innerText = Course.name+"\n\n"+Course.classroom.replace(reg,"").replace("（","");
+	
 }
 
 function changeTitle(weekName){
@@ -80,7 +93,7 @@ function clearPage(){
 			  
 			}
 			if(targetNode.className.match(/CourseBlock(\S*)/)!=null){
-				console.log(targetNode.className.match(/CourseBlock(\S*)/)[0]);
+				//console.log(targetNode.className.match(/CourseBlock(\S*)/)[0]);
 				targetNode.classList.remove(targetNode.className.match(/CourseBlock(\S*)/)[0]);
 			}
 		}

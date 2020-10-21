@@ -7,15 +7,18 @@
 		<link href="css/mui.css" rel="stylesheet" />
 		<style>
 			.main{
-				text-align: center;
-				position: absolute;
-				top: 40%;
-				bottom: 50%;
-				left: 40px;
-				right: 40px;
+				
 			}
 			button{
-				display: block;
+				display: block !important;
+				margin: 0 auto;
+				margin-top: 100px;
+				height: 50px;
+				width: 200px;
+			}
+			.version-info{
+				text-align: center;
+				margin-top: 20%;
 			}
 		</style>
 	</head>
@@ -26,7 +29,9 @@
 			<button type="button" class="mui-btn mui-btn-primary" id="resetCourseBtn">清除课表信息</button>
 			<button type="button" class="mui-btn mui-btn-primary" id="resetAllbtn">清除所有缓存</button>
 		</div>
-		
+		<div class="version-info">
+			开发版 v0.1 Beta
+		</div>
 		<script src="js/mui.js"></script>
 		<script type="text/javascript">
 			mui.init();
