@@ -17,7 +17,7 @@ myapp.dataType.cookie = null;
 myapp.dataType.isLogin=false;
 
 
-var baseUrl = "http://192.168.199.203:1000";
+var baseUrl = "http://47.95.8.86:5000";
 //var baseUrl = "http://39.105.63.200:1000";
 var api_url={};
 api_url.getCaptchaUrl = baseUrl+"/api/getCaptcha";
@@ -151,7 +151,7 @@ var WeekData =
 		text: '第15周'
 	},{
 		value: '16',
-		text: '第17周'
+		text: '第16周'
 	},{
 		value: '17',
 		text: '第17周'
