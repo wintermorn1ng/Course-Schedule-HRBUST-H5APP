@@ -2,7 +2,7 @@
 # 项目介绍
 本项目是为哈尔滨理工大学同学开发的课程表APP。
 
-![](https://gitee.com/wintermorning/img/raw/master/img/Screenshot_2020-11-19-16-20-01-396_hrbust.CourseT.jpg)
+![](https://gitee.com/wintermorning/img/raw/master/img/Screenshot.jpg)
 本项目使用mui框架，用HTML+CSS+JavaScript完成前端开发
 
 本项目的后端实现请参考后端部分的repo：[https://github.com/wintermorn1ng/Course-Schedule-HRBUST-server](https://github.com/wintermorn1ng/Course-Schedule-HRBUST-server)
